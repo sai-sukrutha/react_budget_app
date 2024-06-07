@@ -4,11 +4,16 @@ import { AppContext } from '../context/AppContext';
 const AllocationForm = (props) => {
     const { dispatch,remaining  } = useContext(AppContext);
 
-    const [name, setName] = useState('');
+    const [name, setName] = useState("Marketing");      // Default option to avoid invalid department
     const [cost, setCost] = useState('');
     const [action, setAction] = useState("Add");   // I added default state. Needed as we are selecting it as default option.
 
     const submitEvent = () => {
+
+        if(cost === "") {
+            alert("Invalid Input! Enter Fund value");
+            return;
+        }
 
         // Added the condition action===add as it should not happen during reduce
         if(action === "Add") {
@@ -47,8 +52,7 @@ const AllocationForm = (props) => {
                         <label className="input-group-text" htmlFor="inputGroupSelect01">Department</label>
                     </div>
                     <select className="custom-select" id="inputGroupSelect01" onChange={(event) => setName(event.target.value)}>
-                        <option defaultValue>Choose...</option>
-                        <option value="Marketing" name="marketing"> Marketing</option>
+                        <option defaultValue value="Marketing" name="marketing"> Marketing</option>
                         <option value="Sales" name="sales">Sales</option>
                         <option value="Finance" name="finance">Finance</option>
                         <option value="Human Resource" name="hr">HR</option>

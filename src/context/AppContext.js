@@ -3,9 +3,10 @@ import React, { createContext, useReducer } from 'react';
 // 5. The reducer - this is used to update the state, based on the action
 export const AppReducer = (state, action) => {
     let budget = 0;
+    let total_budget = 0;
     switch (action.type) {
         case 'ADD_EXPENSE':
-            let total_budget = 0;
+            total_budget = 0;
             total_budget = state.expenses.reduce(
                 (previousExp, currentExp) => {
                     return previousExp + currentExp.cost
@@ -30,20 +31,20 @@ export const AppReducer = (state, action) => {
                     ...state
                 }
             }
-            case 'RED_EXPENSE':
-                const red_expenses = state.expenses.map((currentExp)=> {
-                    if (currentExp.name === action.payload.name && currentExp.cost - action.payload.cost >= 0) {
-                        currentExp.cost =  currentExp.cost - action.payload.cost;
-                        budget = state.budget + action.payload.cost
-                    }
-                    return currentExp
-                })
-                action.type = "DONE";
-                return {
-                    ...state,
-                    expenses: [...red_expenses],
-                };
-            case 'DELETE_EXPENSE':
+        case 'RED_EXPENSE':
+            const red_expenses = state.expenses.map((currentExp)=> {
+                if (currentExp.name === action.payload.name && currentExp.cost - action.payload.cost >= 0) {
+                    currentExp.cost =  currentExp.cost - action.payload.cost;
+                    budget = state.budget + action.payload.cost
+                }   
+                return currentExp
+            })
+            action.type = "DONE";
+            return {
+                ...state,
+                expenses: [...red_expenses],
+            };
+        case 'DELETE_EXPENSE':
             action.type = "DONE";
             state.expenses.map((currentExp)=> {
                 if (currentExp.name === action.payload) {
@@ -58,9 +59,10 @@ export const AppReducer = (state, action) => {
                 budget
             };
         case 'SET_BUDGET':
-            action.type = "DONE";
-            state.budget = action.payload;
 
+            state.budget = action.payload;
+             
+            action.type = "DONE";
             return {
                 ...state,
             };

@@ -32,18 +32,45 @@ export const AppReducer = (state, action) => {
                 }
             }
         case 'RED_EXPENSE':
-            const red_expenses = state.expenses.map((currentExp)=> {
-                if (currentExp.name === action.payload.name && currentExp.cost - action.payload.cost >= 0) {
-                    currentExp.cost =  currentExp.cost - action.payload.cost;
-                    budget = state.budget + action.payload.cost
-                }   
-                return currentExp
+            // I changed code(prev code-commented below) as it doesn't show error message when reducing more than what is currently present.
+            let isErr = false;
+            const red_expenses = [...state.expenses];
+            red_expenses.forEach((currentExp) => {
+                if(currentExp.name === action.payload.name ) {
+                    if (currentExp.cost - action.payload.cost >= 0) {
+                        currentExp.cost = currentExp.cost - action.payload.cost;
+                        budget = state.budget + action.payload.cost;
+                    } else {
+                        isErr = true;
+                    }
+                }
             })
-            action.type = "DONE";
-            return {
-                ...state,
-                expenses: [...red_expenses],
-            };
+            if (isErr) {
+                alert("Cannot Reduce! Value is less than allocated");
+                action.type = "DONE";       // TODO: Where to add DONE. Without done, it shows alert twice
+                return {
+                    ...state
+                }
+            } else {
+                action.type = "DONE";
+                return {
+                    ...state,
+                    expenses: [...red_expenses],
+                };
+            }
+
+            // const red_expenses = state.expenses.map((currentExp)=> {
+            //     if (currentExp.name === action.payload.name && currentExp.cost - action.payload.cost >= 0) {
+            //         currentExp.cost =  currentExp.cost - action.payload.cost;
+            //         budget = state.budget + action.payload.cost
+            //     }   
+            //     return currentExp
+            // })
+            // action.type = "DONE";
+            // return {
+            //     ...state,
+            //     expenses: [...red_expenses],
+            // };
         case 'DELETE_EXPENSE':
             action.type = "DONE";
             state.expenses.map((currentExp)=> {

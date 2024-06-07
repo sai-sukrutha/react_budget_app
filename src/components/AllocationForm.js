@@ -6,14 +6,17 @@ const AllocationForm = (props) => {
 
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
-    const [action, setAction] = useState('');
+    const [action, setAction] = useState("Add");   // I added default state. Needed as we are selecting it as default option.
 
     const submitEvent = () => {
 
-        if(cost > remaining) {
-            alert("The value cannot exceed remaining funds  £"+remaining);
-            setCost("");
-            return;
+        // Added the condition action===add as it should not happen during reduce
+        if(action === "Add") {
+            if(cost > remaining) {
+                alert("The value cannot exceed remaining funds  £"+remaining);
+                setCost("");
+                return;
+            }
         }
 
         const expense = {

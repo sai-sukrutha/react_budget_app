@@ -86,9 +86,21 @@ export const AppReducer = (state, action) => {
                 budget
             };
         case 'SET_BUDGET':
-
-            state.budget = action.payload;
-             
+            total_budget = 0;
+            total_budget = state.expenses.reduce(
+                (previousExp, currentExp) => {
+                    return previousExp + currentExp.cost
+                },0
+            );
+            // TODO: It works, but the value changes in input ?
+            if(action.payload < total_budget) {
+                alert('Budget cannot not be lower than Spent so far');
+            } else if (action.payload > 20000) {
+                alert('Budget should not exceed 20,000');
+            } else {
+                // No errors, so update
+                state.budget = action.payload;
+            }
             action.type = "DONE";
             return {
                 ...state,
